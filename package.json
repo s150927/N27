@@ -1,0 +1,21 @@
+{
+  "name": "n27",
+  "version": "1.0.0",
+  "description": "Meine tolle Smartphone- ",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://s150927@bitbucket.org/s150927/n27.git"
+  },
+  "author": "Jo Bernhard",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/s150927/n27#readme"
+}
