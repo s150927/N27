@@ -6,6 +6,16 @@
 // Das Framework muss mit npm installiert werden:
 // im Terminal: npm install exprss --save 
 
+// const express = require ('express')
+// express muss über die internet seite installiert werden ( expressjs.com) 
+// app.set ('view engine ', 'ejs')
+// ejs muss wieder im Terminal installiert werden 
+// app.use(express.static('public'))
+// mit diesem befehl zeigt man der app wo die Statischen in halte sind 
+app.get('/',(req,res,next) => {
+ res,render('index.ejs', {
+ })
+} )
 const express = require('express')
 // Das appp-Objekt wird initalisiert 
 // Das app-Objekt repräsentiert den Server.
