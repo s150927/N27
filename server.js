@@ -1,14 +1,12 @@
 class Konto{
-  constructor(){
-      this.Kotonummer
-      this.Kontoart
-  }
-
+    constructor(){
+        this.Kontonummer
+        this.Kontoart
+    }
 }
 
-
-
 const express = require('express')
+//const iban = require('iban')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const app = express()
@@ -90,8 +88,8 @@ app.get('/kontoAnlegen',(req, res, next) => {
         
         // ... dann wird kontoAnlegen.ejs gerendert.
         
-        res.render('kontoAnlegen.ejs', {  
-            meldung : "Das Konto wurde erfolgreich angelegt"                                                        
+        res.render('kontoAnlegen.ejs', {    
+            meldung : ""                          
         })
     }else{
         res.render('login.ejs', {                    
@@ -99,7 +97,7 @@ app.get('/kontoAnlegen',(req, res, next) => {
     }
 })
 
-// Wenn der Button auf der kontoanlegen-Seite gedrückt wird, ...
+// Wenn der Button auf der kontoAnlegen-Seite gedrückt wird, ...
 
 app.post('/kontoAnlegen',(req, res, next) => {   
 
@@ -107,15 +105,18 @@ app.post('/kontoAnlegen',(req, res, next) => {
     
     if(idKunde){
         console.log("Kunde ist angemeldet als " + idKunde)
-       
+        
         let konto = new Konto()
         konto.Kontonummer = req.body.kontonummer
         konto.Kontoart = req.body.kontoart
-
-        // ... dann wird kontoAnlegen.ejs gerendert.
         
-        res.render('kontoAnlegen.ejs', {  
-            meldung : "Das Kont " + konto.Kontonummer + " " + konto.Kontoart + " wurde erfolgreich angelegt"                            
+        let bankleitzahl = 12345678
+
+        let errechneteIban = iban.fromBBAN("DE",bankleitzahl + " " + konto.Kontonummer)
+
+    console.log(errechneteIban)
+        res.render('kontoAnlegen.ejs', {                              
+            meldung : "Das " + konto.Kontoart + " mit der Kontonummer " + konto.Kontonummer + " wurde erfolgreich angelegt."
         })
     }else{
         res.render('login.ejs', {                    
