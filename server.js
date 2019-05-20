@@ -4,6 +4,24 @@ class Konto{
         this.Kontoart
     }
 }
+class Kunde{
+    constructor(){
+        this.Nachname
+        this.Geschlecht
+        this.IdKunde
+        this.Geburtsdatum
+        this.Adresse
+        this.Kennwort
+
+    }
+}
+
+let kunde = new Kunde()
+kunde.IdKunde = 4711
+kunde.Kennwort = "123"
+kunde.Geburtsdatum = "1999-12-31"
+kunde.Nachname = "Karpe"
+kunde.Vorname = "David"
 
 const express = require('express')
 //const iban = require('iban')
@@ -18,9 +36,9 @@ app.use(cookieParser())
 const server = app.listen(process.env.PORT || 3000, () => {
     console.log('Server lauscht auf Port %s', server.address().port)    
 })
-
+// Ausgabe von server lauscht ... im Terminal 
 app.get('/',(req, res, next) => {   
-
+//Die app.get (`/` ....)wird abgearbeitet ernn die Startseite im Browser aufgerufen wird
     let idKunde = req.cookies['istAngemeldetAls']
     
     if(idKunde){
@@ -63,7 +81,7 @@ app.post('/',(req, res, next) => {
     const idKunde = req.body.idKunde
     const kennwort = req.body.kennwort
         
-    if(idKunde === "4711" && kennwort === "123"){            
+    if(IdKunde === "4711" && kennwort === "123"){            
         console.log("Der Cookie wird gesetzt:")
         res.cookie('istAngemeldetAls', idKunde)
         res.render('index.ejs', {  
@@ -107,18 +125,22 @@ app.post('/kontoAnlegen',(req, res, next) => {
         console.log("Kunde ist angemeldet als " + idKunde)
         
         let konto = new Konto()
+// Der Wert aus dem input mit dem Namen Kontonummer wird zugewieswn
+// (=)an die Eigenschaft Kontonummer des Objekts namens Konto 
+
         konto.Kontonummer = req.body.kontonummer
         konto.Kontoart = req.body.kontoart
         
         let bankleitzahl = 12345678
 
         let errechneteIban = iban.fromBBAN("DE",bankleitzahl + " " + konto.Kontonummer)
-
+//... wird die kontoanlegen ejs gerendert 
     console.log(errechneteIban)
         res.render('kontoAnlegen.ejs', {                              
             meldung : "Das " + konto.Kontoart + " mit der Kontonummer " + konto.Kontonummer + " wurde erfolgreich angelegt."
         })
     }else{
+        // Die login.ejs wird gerendert und als Respons an den Browser zurückgegeben 
         res.render('login.ejs', {                    
         })    
     }
