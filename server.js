@@ -4,6 +4,7 @@ class Konto{
         this.Kontoart
     }
 }
+//klassendefinition 
 class Kunde{
     constructor(){
         this.Nachname
@@ -16,12 +17,15 @@ class Kunde{
     }
 }
 
+
+
 let kunde = new Kunde()
 kunde.IdKunde = 4711
 kunde.Kennwort = "123"
 kunde.Geburtsdatum = "1999-12-31"
 kunde.Nachname = "Karpe"
-kunde.Vorname = "David"
+kunde.Vorname = "David"++
+kunde.Adresse = "hans Peter Straße 5"
 
 const express = require('express')
 //const iban = require('iban')
@@ -77,11 +81,14 @@ app.get('/login',(req, res, next) => {
 })
 
 app.post('/',(req, res, next) => {   
-    
+    // Der Wert des Inputs mit dem namen0 "idkunde" wird über den  Request zugewisen an di Konstante idkunde
     const idKunde = req.body.idKunde
     const kennwort = req.body.kennwort
-        
-    if(IdKunde === "4711" && kennwort === "123"){            
+
+    console.log(idKunde + " == " + kunde.IdKunde + kennwort + " == "+ kunde.Kennwort)
+// Wenn der Wert von idkunde dem Wert der Eigenschaft kunde. Idkunde entspricht Und der Wert von kennwort der eigenschaft kunde. Kennwort 
+// entspricht denn werden die Anweis
+    if(IdKunde == "4711" && kennwort == "123"){            
         console.log("Der Cookie wird gesetzt:")
         res.cookie('istAngemeldetAls', idKunde)
         res.render('index.ejs', {  
