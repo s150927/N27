@@ -24,7 +24,7 @@ kunde.IdKunde = 4711
 kunde.Kennwort = "123"
 kunde.Geburtsdatum = "1999-12-31"
 kunde.Nachname = "Karpe"
-kunde.Vorname = "David"++
+kunde.Vorname = "David"
 kunde.Adresse = "hans Peter Straße 5"
 
 const express = require('express')
@@ -142,9 +142,47 @@ app.post('/kontoAnlegen',(req, res, next) => {
 
         let errechneteIban = iban.fromBBAN("DE",bankleitzahl + " " + konto.Kontonummer)
 //... wird die kontoanlegen ejs gerendert 
-    console.log(errechneteIban)
+
         res.render('kontoAnlegen.ejs', {                              
-            meldung : "Das " + konto.Kontoart + " mit der Kontonummer " + konto.Kontonummer + " wurde erfolgreich angelegt."
+            meldung : "Dconsole.log(erras " + konto.Kontoart + " mit der Kontonummer " + konto.Kontonummer + " wurde erfolgreich angelegt."
+        })
+    }else{
+        // Die login.ejs wird gerendert und als Respons an den Browser zurückgegeben 
+        res.render('login.ejs', {                    
+        })    
+    }
+})
+
+app.get('/stammdatenPflegen.ejs',(req, res, next) => {   
+
+    let idKunde = req.cookies['istAngemeldetAls']
+    
+    if(idKunde){
+        console.log("Kunde ist angemeldet als " + idKunde)
+        
+        // ... dann wird kontoAnlegen.ejs gerendert.
+        
+        res.render('stammdatenPflegen.ejs', {    
+            meldung : ""                          
+        })
+    }else{
+        res.render('login.ejs', {                    
+        })    
+    }
+})
+
+app.post('/stammdatenPflegen.ejs',(req, res, next) => {   
+
+    let idKunde = req.cookies['istAngemeldetAls']
+    
+    if(idKunde){
+        console.log("Kunde ist angemeldet als " + idKunde)
+
+        kunde.Nachname = req.body.nachname
+        kunde.Kennwort = req.body.kennwort
+        
+        res.render('stammdatenPflegen.ejs', {                              
+            meldung : "Die Stammdaten wurden geändert"
         })
     }else{
         // Die login.ejs wird gerendert und als Respons an den Browser zurückgegeben 
