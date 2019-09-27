@@ -50,14 +50,11 @@ const dbVerbindung = mysql.createConnection({
 })
 
 dbVerbindung.connect(function(fehler){
-dbVerbindung.query('CREATE TABEL IF NOT EXISTS konto(iban VARCHAR(22), anfangssaldo DECIMAL(15,2), kontoart VARCHAR(20), timestamp TIMESTAMP, PRIMARY KEY(IBAN));', function (fehler) {
-        if (fehler) throw fehler;
-        console.log('Die Tabelle konto wurde erfolgreich angelegt');
-    })    
+    dbVerbindung.query('CREATE TABLE IF NOT EXISTS konto(iban VARCHAR(22), anfangssaldo DECIMAL(15,2), kontoart VARCHAR(20), timestamp TIMESTAMP, PRIMARY KEY(iban));', function (fehler) {
+        if (fehler) throw fehler
+        console.log('Die Tabelle konto wurde erfolgreich angelegt.')
+    })
 })
-
-
-
 
 const app = express()
 app.set('view engine', 'ejs')
@@ -181,7 +178,7 @@ app.post('/kontoAnlegen',(req, res, next) => {
         
         // Füge das Konto in die MySQL-Datenbank ein
     
-        dbVerbindung.query('INSERT INTO konto(iban,timestamp,anfangssaldo,kontoart) VALUES ("' + konto.Iban + '",100,"' + konto.Kontoart + '",NOW());', function (error, results, fields) {
+        dbVerbindung.query('INSERT INTO konto(iban,anfangssaldo,kontoart,timestamp) VALUES ("' + konto.Iban + '",100,"' + konto.Kontoart + '",NOW());', function (fehler) {
             if (fehler) throw fehler;
             console.log('Das Konto wurde erfolgreich angelegt');
         });
@@ -253,3 +250,115 @@ app.post('/stammdatenPflegen',(req, res, next) => {
     }
 })
 
+app.get('/ueberweisen',(req, res, next) => {  
+
+ 
+
+    let idKunde = req.cookies['istAngemeldetAls']
+
+   
+
+    if(idKunde){
+
+        console.log("Kunde ist angemeldet als " + idKunde)
+
+       
+
+      
+
+        
+
+        res.render('ueberweisen.ejs', {   
+
+            meldung : ""                         
+
+        })
+
+    }else{
+
+        res.render('login.ejs', {                   
+
+        })   
+
+    }
+
+})
+
+
+
+
+app.post('/ueberweisen',(req, res, next) => {  
+
+ 
+
+    let idKunde = req.cookies['istAngemeldetAls']
+
+   
+
+    if(idKunde){
+
+        console.log("Kunde ist angemeldet als " + idKunde)
+
+       
+
+        let konto = new Konto()
+
+ 
+
+        // Der Wert aus dem Input mit dem Namen 'kontonummer'
+
+        // wird zugewiesen (=) an die Eigenschaft Kontonummer
+
+        // des Objekts namens konto.
+
+        konto.Kontonummer = req.body.kontonummer
+
+        konto.Kontoart = req.body.kontoart
+
+        const bankleitzahl = 27000000
+
+        const laenderkennung = "DE"
+
+        konto.Iban = iban.fromBBAN(laenderkennung,bankleitzahl + " " + konto.Kontonummer)
+
+       
+
+        // Füge das Konto in die MySQL-Datenbank ein
+
+   
+
+        dbVerbindung.query('INSERT INTO konto(iban,anfangssaldo,kontoart,timestamp) VALUES ("' + konto.Iban + '",100,"' + konto.Kontoart + '",NOW());', function (fehler) {
+
+            if (fehler) throw fehler;
+
+            console.log('Das Konto wurde erfolgreich angelegt');
+
+        });
+
+ 
+
+        // ... wird die kontoAnlegen.ejs gerendert.
+
+ 
+
+        res.render('ueberweisen.ejs', {                             
+
+            meldung : "Das " + konto.Kontoart + " mit der IBAN " + konto.Iban + " wurde erfolgreich angelegt."
+
+        })
+
+    }else{
+
+        // Die login.ejs wird gerendert
+
+        // und als Response
+
+        // an den Browser übergeben.
+
+        res.render('login.ejs', {                   
+
+        })   
+
+    }
+
+})
