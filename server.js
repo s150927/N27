@@ -1,3 +1,6 @@
+// die klasse ist der Bauplan der alle relevanten Eigenschaften enthält 
+
+
 class Konto{
     constructor(){
         this.Kontonummer
